@@ -5,92 +5,42 @@ import {
   type MRT_ColumnDef,
 } from "material-react-table";
 
-type Person = {
-  name: {
-    firstName: string;
-    lastName: string;
+type Exercise = {
+  exercise: {
+    name: string;
+    weigth: string;
+    sets: string[]
   };
-  address: string;
-  city: string;
-  state: string;
 };
 
 //nested data is ok, see accessorKeys in ColumnDef below
-const data: Person[] = [
+const data: Exercise[] = [
   {
-    name: {
-      firstName: "John",
-      lastName: "Doe",
+    exercise: {
+      name: "Pecho sentado",
+      weigth: "70",
+      sets: ['9-8-9', '10-9-8']
     },
-    address: "261 Erdman Ford",
-    city: "East Daphne",
-    state: "Kentucky",
-  },
-  {
-    name: {
-      firstName: "Jane",
-      lastName: "Doe",
-    },
-    address: "769 Dominic Grove",
-    city: "Columbus",
-    state: "Ohio",
-  },
-  {
-    name: {
-      firstName: "Joe",
-      lastName: "Doe",
-    },
-    address: "566 Brakus Inlet",
-    city: "South Linda",
-    state: "West Virginia",
-  },
-  {
-    name: {
-      firstName: "Kevin",
-      lastName: "Vandy",
-    },
-    address: "722 Emie Stream",
-    city: "Lincoln",
-    state: "Nebraska",
-  },
-  {
-    name: {
-      firstName: "Joshua",
-      lastName: "Rolluffs",
-    },
-    address: "32188 Larkin Turnpike",
-    city: "Omaha",
-    state: "Nebraska",
   },
 ];
 
 export default function ExerciseTable() {
-  const columns = useMemo<MRT_ColumnDef<Person>[]>(
+  const columns = useMemo<MRT_ColumnDef<Exercise>[]>(
     () => [
       {
-        accessorKey: "name.firstName", //access nested data with dot notation
-        header: "First Name",
-        size: 150,
+        accessorKey: "exercise.name", //access nested data with dot notation
+        header: "Ejecicio",
+        size: 120,
       },
       {
-        accessorKey: "name.lastName",
-        header: "Last Name",
-        size: 150,
+        accessorKey: "exercise.weigth", //access nested data with dot notation
+        header: "Peso",
+        size: 90,
       },
       {
-        accessorKey: "address", //normal accessorKey
-        header: "Address",
-        size: 200,
-      },
-      {
-        accessorKey: "city",
-        header: "City",
-        size: 150,
-      },
-      {
-        accessorKey: "state",
-        header: "State",
-        size: 150,
+        accessorKey: "exercise.sets", //access nested data with dot notation
+        header: "Sets",
+        size: 190,
       },
     ],
     []
@@ -98,11 +48,19 @@ export default function ExerciseTable() {
 
   const table = useMaterialReactTable({
     columns,
-    data, //data must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    data,
+    enableColumnPinning: true,
+    layoutMode: "grid-no-grow",
+    initialState: {
+      columnPinning: { left: ["mrt-row-actions", "exercise.name"] },
+    },
+    enablePagination: false,
+    enableBottomToolbar: false,
+    enableFilters: false,
   });
 
   return (
-    <div style={{marginTop: "1.5rem"}}>
+    <div style={{ marginTop: "1.5rem" }}>
       <MaterialReactTable table={table} />
     </div>
   );
