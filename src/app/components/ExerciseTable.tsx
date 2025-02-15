@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Input } from "@mui/material";
+import { Button, Input, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { InputRenderer } from "@/app/components/InputRenderer";
 
@@ -28,7 +28,7 @@ const data: Exercise[] = [
     exercise: {
       id: 1,
       name: "Pecho sentado",
-      weigth: "70",
+      weigth: "70kg",
       sets: [
         {
           id: 1,
@@ -36,7 +36,7 @@ const data: Exercise[] = [
           inputs: [
             {
               id: 1,
-              input: <Input defaultValue={"10, 8, 9"} sx={{width: 80}}/>,
+              input: <Input defaultValue={"10, 8, 9"} sx={{ width: 80 }} />,
             },
           ],
         },
@@ -47,7 +47,7 @@ const data: Exercise[] = [
     exercise: {
       id: 2,
       name: "Sentadill",
-      weigth: "70",
+      weigth: "70kg",
       sets: [
         {
           id: 1,
@@ -55,7 +55,7 @@ const data: Exercise[] = [
           inputs: [
             {
               id: 1,
-              input: <Input defaultValue={"10, 10, 10"} sx={{width: 80}}/>,
+              input: <Input defaultValue={"10, 10, 10"} sx={{ width: 80 }} />,
             },
           ],
         },
@@ -65,30 +65,6 @@ const data: Exercise[] = [
 ];
 
 export default function ExerciseTable() {
-  //   const renderInputs = (inputs: any) => {
-  //     return (
-  //       <div
-  //         style={{
-  //           width: 200,
-  //           overflowX: "scroll",
-  //           display: "flex",
-  //           border: "1px solid #ccc",
-  //         }}
-  //       >
-  //         {inputs.map((input: any, index: number) => (
-  //           <div key={index} style={{ marginRight: 10, flexShrink: 0 }}>
-  //             <Input
-  //               id="outlined-basic"
-  //               key={Date.now()}
-  //               value={input?.repetitions}
-  //               sx={{ marginLeft: 3, width: 80 }}
-  //             />
-  //           </div>
-  //         ))}
-  //       </div>
-  //     );
-  //   };
-
   const handleChangeInput = (
     idInput: number,
     event: React.ChangeEvent<HTMLInputElement>,
@@ -104,7 +80,9 @@ export default function ExerciseTable() {
               if (input.id === idInput) {
                 return {
                   ...input,
-                  input: <Input defaultValue={newInputValue} sx={{width: 80}}/>, // Actualizamos el valor del input
+                  input: (
+                    <Input defaultValue={newInputValue} sx={{ width: 80 }} />
+                  ), // Actualizamos el valor del input
                 };
               }
               return input; // Devolvemos el input sin modificar si no coincide el ID
@@ -144,7 +122,7 @@ export default function ExerciseTable() {
               ...set,
               inputs: set.inputs.concat({
                 id: newInputId,
-                input: <Input key={Date.now()} value={""} sx={{width: 80}}/>,
+                input: <Input key={Date.now()} value={""} sx={{ width: 80 }} />,
               }),
             };
           }
@@ -189,28 +167,26 @@ export default function ExerciseTable() {
             >
               <div
                 style={{
-                  border: "1px solid",
-                  width: 140,
-                  height: 33,
-                  alignContent: "center",
-                  justifyContent: "center",
+                  display: "flex",
+                  flexDirection: "row",
                 }}
               >
-                <span style={{ marginLeft: 15 }}>
-                  {exerciseMap.exercise.name}
-                </span>
-              </div>
-              {exerciseMap.exercise.sets.map((set: Sets) => (
-                <Button
-                  key={index}
-                  onClick={() => addSet(exerciseMap.exercise.id, set.id)}
+                <Typography
+                  sx={{ width: 160, paddingTop: "0.4rem" }}
+                  variant="body1"
                 >
-                  <AddIcon />
-                </Button>
-              ))}
-              <div
-                key={exerciseMap.exercise.id}
-              >
+                  {exerciseMap.exercise.name} - {exerciseMap.exercise.weigth}
+                </Typography>
+                {exerciseMap.exercise.sets.map((set: Sets) => (
+                  <Button
+                    key={index}
+                    onClick={() => addSet(exerciseMap.exercise.id, set.id)}
+                  >
+                    <AddIcon />
+                  </Button>
+                ))}
+              </div>
+              <div key={exerciseMap.exercise.id}>
                 {exerciseMap.exercise.sets.map((set) => (
                   <div key={set.id} style={{ flex: "1" }}>
                     <InputRenderer
