@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, Input, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { InputRenderer } from "@/app/components/InputRenderer";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 type Sets = {
   id: number;
@@ -55,7 +56,7 @@ const data: Exercise[] = [
           inputs: [
             {
               id: 1,
-              input: <Input defaultValue={"10, 10, 10"} sx={{ width: 80 }} />,
+              input: <Input defaultValue={"10, 8, 9"} sx={{ width: 80 }} />,
             },
           ],
         },
@@ -65,6 +66,8 @@ const data: Exercise[] = [
 ];
 
 export default function ExerciseTable() {
+  const [exercises, setExercices] = useState<Exercise[]>(data);
+
   const handleChangeInput = (
     idInput: number,
     event: React.ChangeEvent<HTMLInputElement>,
@@ -81,8 +84,13 @@ export default function ExerciseTable() {
                 return {
                   ...input,
                   input: (
-                    <Input defaultValue={newInputValue} sx={{ width: 80 }} />
-                  ), // Actualizamos el valor del input
+                    <div>
+                      <Input defaultValue={newInputValue} sx={{ width: 80 }} />
+                      <Button onClick={() => handleDeleteInput(input.id)}>
+                        <DeleteIcon />
+                      </Button>
+                    </div>
+                  ),
                 };
               }
               return input; // Devolvemos el input sin modificar si no coincide el ID
@@ -110,7 +118,25 @@ export default function ExerciseTable() {
     setExercices(newExercise);
   };
 
-  const [exercises, setExercices] = useState<Exercise[]>(data);
+  const handleDeleteInput = (idInput: number) => {
+    const newListExecercises = exercises.map((exerciseMap: Exercise) => {
+      const newListSets = exerciseMap.exercise.sets.map((set) => {
+        const newInputList = set.inputs.filter((input) => input.id !== idInput);
+        return {
+          ...set,
+          inputs: newInputList,
+        };
+      });
+      return {
+        ...exerciseMap,
+        exercise: {
+          ...exerciseMap.exercise,
+          sets: newListSets, // Actualizamos los sets del ejercicio
+        },
+      };
+    });
+    setExercices(newListExecercises);
+  };
 
   const addSet = (id: number, idSet: number) => {
     const newExercise = exercises.map((exerciseMap: Exercise) => {
@@ -122,7 +148,14 @@ export default function ExerciseTable() {
               ...set,
               inputs: set.inputs.concat({
                 id: newInputId,
-                input: <Input key={Date.now()} value={""} sx={{ width: 80 }} />,
+                input: (
+                  <div>
+                    <Input key={Date.now()} value={""} sx={{ width: 80 }} />
+                    <Button>
+                      <DeleteIcon onClick={() => handleDeleteInput(newInputId)}/>
+                    </Button>
+                  </div>
+                ),
               }),
             };
           }
