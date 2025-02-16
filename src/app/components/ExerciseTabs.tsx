@@ -17,7 +17,7 @@ function CustomTabPanel(props: TabPanelProps) {
     >
       {value === index && (
         <Box>
-          <Exercises />
+          <Exercises tab={value}/>
         </Box>
       )}
     </div>
@@ -39,11 +39,11 @@ export default function ExerciseTabs() {
           onChange={handleChange}
           variant="scrollable"
         >
-          <Tab label="Pull" />
-          <Tab label="Leg" />
           <Tab label="Push" />
-          <Tab label="P + E" />
+          <Tab label="Leg" />
+          <Tab label="Pull" />
           <Tab label="Arms" />
+          <Tab label="P + E" />
         </Tabs>
       </Box>
       {exerciseTabsIndex.map((_, i: number) => (

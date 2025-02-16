@@ -15,23 +15,33 @@ type Exercise = {
   name: string;
   weigth: string;
   sets: Sets[];
+  tab: number;
 };
 
-export default function Exercises() {
+interface ExerciseProps {
+  tab: number;
+}
+
+export default function Exercises({ tab }: ExerciseProps) {
   const [exercises, setExercices] = useState<Exercise[]>([]);
   const name = useRef<HTMLInputElement>(null);
   const weigth = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const exerciseFromLocalStorage = JSON.parse(
-      window.localStorage.getItem("exercises") || "[]"
+      window.localStorage.getItem(`exercises${tab}`) || "[]"
     );
     setExercices(exerciseFromLocalStorage);
   }, []);
 
+  const setLocalStorage = (tab: number, exercises: Exercise[]) => {
+    localStorage.setItem(`exercises${tab}`, JSON.stringify(exercises));
+  }
+
   const addNewExercise = () => {
     const newExerciseObject: Exercise = {
       id: uuidv4(),
+      tab: tab,
       name: name?.current?.value || "",
       weigth: weigth?.current?.value || "",
       sets: [
@@ -43,7 +53,7 @@ export default function Exercises() {
     };
     const newExercisesList = exercises.concat(newExerciseObject);
     setExercices(newExercisesList);
-    localStorage.setItem("exercises", JSON.stringify(newExercisesList));
+    setLocalStorage(tab, newExercisesList);
     if (name.current && weigth.current) {
       name.current.value = "";
       weigth.current.value = "";
@@ -73,8 +83,8 @@ export default function Exercises() {
       }
       return exerciseMap;
     });
-    setExercices(newExercise.flat());
-    localStorage.setItem("exercises", JSON.stringify(newExercise));
+    setExercices(newExercise);
+    setLocalStorage(tab, newExercise);
   };
 
   const handlerDeleteSet = (idExercise: string, idSet: string) => {
@@ -97,7 +107,7 @@ export default function Exercises() {
       })
       .filter(Boolean) as Exercise[];
     setExercices(newExercise);
-    localStorage.setItem("exercises", JSON.stringify(newExercise));
+    setLocalStorage(tab, newExercise);
   };
 
   const addSet = (idExercise: string) => {
@@ -171,10 +181,10 @@ export default function Exercises() {
                   }}
                 >
                   <Typography
-                    sx={{ width: 160, paddingTop: "0.4rem" }}
+                    sx={{ width: 160, paddingTop: "0.4rem", fontSize: "0.9rem" }}
                     variant="body1"
                   >
-                    {exerciseMap.name} - {exerciseMap.weigth}
+                    {exerciseMap.name} - {exerciseMap.weigth} <span>kg</span>
                   </Typography>
                   <Button key={index} onClick={() => addSet(exerciseMap.id)}>
                     <AddIcon />
