@@ -1,4 +1,4 @@
-import { Button, TextField, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { Input } from "@mui/material";
 import { InputRenderer } from "@/app/components/InputRenderer";
 import AddIcon from "@mui/icons-material/Add";
@@ -32,7 +32,7 @@ export default function Exercises({ tab }: ExerciseProps) {
       window.localStorage.getItem(`exercises${tab}`) || "[]"
     );
     setExercices(exerciseFromLocalStorage);
-  }, []);
+  }, [tab]);
 
   const setLocalStorage = (tab: number, exercises: Exercise[]) => {
     localStorage.setItem(`exercises${tab}`, JSON.stringify(exercises));
