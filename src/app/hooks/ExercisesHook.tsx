@@ -98,7 +98,7 @@ export function ExercisesHooks(tab: number) {
           id: uuidv4(),
           repetitions: "",
         };
-        exerciseMap.sets.push(newSet);
+        exerciseMap.sets.unshift(newSet);
       }
       return exerciseMap;
     });
