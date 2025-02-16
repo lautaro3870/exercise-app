@@ -1,43 +1,44 @@
 import React from "react";
-import { Inputs } from "./ExerciseTable";
+import { Button, Input } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface InputRendererProps {
-  inputs: Inputs[];
-  idExercise: number; // ID del ejercicio
-  idSet: number; // ID del set
+  idExercise: string;
+  idSet: string;
+  repetitions: string;
   handlerChange: (
-    id: number,
     event: React.ChangeEvent<HTMLInputElement>,
-    idExercise: number,
-    idSet: number
+    idExercise: string,
+    idSet: string
   ) => void;
 }
 
 export const InputRenderer: React.FC<InputRendererProps> = ({
-  inputs,
   handlerChange,
   idExercise,
   idSet,
+  repetitions,
 }) => {
   return (
     <div
       style={{
-        width: 200,
-        overflowX: "auto",
         display: "flex",
-        border: "1px solid #ccc",
         flexDirection: "row",
-        gap: 10
+        gap: 10,
       }}
     >
-      {inputs.map((input) => (
-        <div key={input.id} style={{ minWidth: "60px", flex: "none" }}>
-          {React.cloneElement(input.input as React.ReactElement, {
-            onChange: (event: React.ChangeEvent<HTMLInputElement>) =>
-              handlerChange(input.id, event, idExercise, idSet),
-          })}
-        </div>
-      ))}
+      <Input
+        sx={{ width: 90, marginRight: "-1rem" }}
+        key={idSet}
+        value={repetitions}
+        type="text"
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          handlerChange(event, idExercise, idSet);
+        }}
+      />
+      <Button>
+        <DeleteIcon />
+      </Button>
     </div>
   );
 };

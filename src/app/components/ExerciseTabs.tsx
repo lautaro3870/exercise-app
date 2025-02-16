@@ -2,7 +2,7 @@
 import { Box, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
 import { TabPanelProps } from "../interfaces/interfaces";
-import ExerciseTable from "./ExerciseTable";
+import Exercises from "./Exercises";
 
 function CustomTabPanel(props: TabPanelProps) {
   const { value, index, ...other } = props;
@@ -17,7 +17,7 @@ function CustomTabPanel(props: TabPanelProps) {
     >
       {value === index && (
         <Box>
-          <ExerciseTable />
+          <Exercises />
         </Box>
       )}
     </div>

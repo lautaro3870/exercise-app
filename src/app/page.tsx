@@ -1,6 +1,5 @@
 import ExerciseTabs from "./components/ExerciseTabs";
 
-
 export default function Home() {
   return (
     <div>
