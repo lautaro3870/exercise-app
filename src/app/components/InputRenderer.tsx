@@ -33,7 +33,7 @@ export const InputRenderer: React.FC<InputRendererProps> = ({
         sx={{ width: 80, marginRight: "-1rem" }}
         key={idSet}
         value={repetitions}
-        type="text"
+        type="number"
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           handlerChange(event, idExercise, idSet);
         }}
