@@ -4,6 +4,8 @@ import { InputRenderer } from "@/app/components/InputRenderer";
 import AddIcon from "@mui/icons-material/Add";
 import { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import Swal from "sweetalert2";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 type Sets = {
   id: string;
@@ -36,7 +38,7 @@ export default function Exercises({ tab }: ExerciseProps) {
 
   const setLocalStorage = (tab: number, exercises: Exercise[]) => {
     localStorage.setItem(`exercises${tab}`, JSON.stringify(exercises));
-  }
+  };
 
   const addNewExercise = () => {
     const newExerciseObject: Exercise = {
@@ -125,6 +127,25 @@ export default function Exercises({ tab }: ExerciseProps) {
     localStorage.setItem("exercises", JSON.stringify(newExercise));
   };
 
+  const openModal = () => {
+    Swal.fire({
+      title: "Eliminar",
+      showDenyButton: true,
+      denyButtonText: `Eliminar`,
+      showConfirmButton: false,
+      width: 180,
+    }).then((result) => {
+      if (result.isDenied) {
+        removeAllExercises();
+      }
+    });
+  };
+
+  const removeAllExercises = () => {
+    setExercices([]);
+    setLocalStorage(tab, []);
+  };
+
   return (
     <div style={{ marginTop: "1.5rem" }}>
       <div
@@ -153,7 +174,7 @@ export default function Exercises({ tab }: ExerciseProps) {
               inputRef={name}
             />
             <Input
-              type="text"
+              type="number"
               sx={{
                 width: 28,
                 marginLeft: 2,
@@ -162,7 +183,10 @@ export default function Exercises({ tab }: ExerciseProps) {
               placeholder="Kg"
               inputRef={weigth}
             />
-            <Button onClick={addNewExercise}>New exercise</Button>
+            <Button onClick={addNewExercise}>Exercise</Button>
+            <Button variant="outlined" color="error" onClick={openModal}>
+              <DeleteIcon />
+            </Button>
           </div>
           {exercises.length !== 0 ? (
             exercises.map((exerciseMap: Exercise, index: number) => (
@@ -181,7 +205,11 @@ export default function Exercises({ tab }: ExerciseProps) {
                   }}
                 >
                   <Typography
-                    sx={{ width: 160, paddingTop: "0.4rem", fontSize: "0.9rem" }}
+                    sx={{
+                      width: 160,
+                      paddingTop: "0.4rem",
+                      fontSize: "0.9rem",
+                    }}
                     variant="body1"
                   >
                     {exerciseMap.name} - {exerciseMap.weigth} <span>kg</span>
