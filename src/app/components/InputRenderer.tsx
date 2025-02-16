@@ -1,18 +1,7 @@
 import React from "react";
 import { Button, Input } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-
-interface InputRendererProps {
-  idExercise: string;
-  idSet: string;
-  repetitions: string;
-  handlerChange: (
-    event: React.ChangeEvent<HTMLInputElement>,
-    idExercise: string,
-    idSet: string
-  ) => void;
-  handlerDeleteSet: (idExercise: string, idSet: string) => void;
-}
+import { InputRendererProps } from "../interfaces/interfaces";
 
 export const InputRenderer: React.FC<InputRendererProps> = ({
   handlerChange,

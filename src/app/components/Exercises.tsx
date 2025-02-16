@@ -1,150 +1,21 @@
 import { Button, Typography } from "@mui/material";
-import { Input } from "@mui/material";
 import { InputRenderer } from "@/app/components/InputRenderer";
 import AddIcon from "@mui/icons-material/Add";
-import { useEffect, useRef, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import Swal from "sweetalert2";
-import DeleteIcon from "@mui/icons-material/Delete";
-
-type Sets = {
-  id: string;
-  repetitions: string;
-};
-
-type Exercise = {
-  id: string;
-  name: string;
-  weigth: string;
-  sets: Sets[];
-  tab: number;
-};
-
-interface ExerciseProps {
-  tab: number;
-}
+import { Exercise, ExerciseProps } from "../interfaces/interfaces";
+import { ExercisesHooks } from "../hooks/ExercisesHook";
+import NewExercise from "./NewExercise";
 
 export default function Exercises({ tab }: ExerciseProps) {
-  const [exercises, setExercices] = useState<Exercise[]>([]);
-  const name = useRef<HTMLInputElement>(null);
-  const weigth = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const exerciseFromLocalStorage = JSON.parse(
-      window.localStorage.getItem(`exercises${tab}`) || "[]"
-    );
-    setExercices(exerciseFromLocalStorage);
-  }, [tab]);
-
-  const setLocalStorage = (tab: number, exercises: Exercise[]) => {
-    localStorage.setItem(`exercises${tab}`, JSON.stringify(exercises));
-  };
-
-  const addNewExercise = () => {
-    const newExerciseObject: Exercise = {
-      id: uuidv4(),
-      tab: tab,
-      name: name?.current?.value || "",
-      weigth: weigth?.current?.value || "",
-      sets: [
-        {
-          id: uuidv4(),
-          repetitions: "",
-        },
-      ],
-    };
-    const newExercisesList = exercises.concat(newExerciseObject);
-    setExercices(newExercisesList);
-    setLocalStorage(tab, newExercisesList);
-    if (name.current && weigth.current) {
-      name.current.value = "";
-      weigth.current.value = "";
-    }
-  };
-
-  const handleChangeInput = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    idExercise: string,
-    idSet: string
-  ) => {
-    const newExercise = exercises.map((exerciseMap: Exercise) => {
-      if (exerciseMap.id === idExercise) {
-        const newSet = exerciseMap.sets.map((set: Sets) => {
-          if (set.id === idSet) {
-            return {
-              ...set,
-              repetitions: event.target.value,
-            };
-          }
-          return set;
-        });
-        return {
-          ...exerciseMap,
-          sets: newSet,
-        };
-      }
-      return exerciseMap;
-    });
-    setExercices(newExercise);
-    setLocalStorage(tab, newExercise);
-  };
-
-  const handlerDeleteSet = (idExercise: string, idSet: string) => {
-    const newExercise = exercises
-      .map((exerciseMap: Exercise) => {
-        if (exerciseMap.id === idExercise) {
-          const newSets = exerciseMap.sets.filter(
-            (set: Sets) => set.id !== idSet
-          );
-          if (newSets.length === 0) {
-            return undefined;
-          } else {
-            return {
-              ...exerciseMap,
-              sets: newSets,
-            };
-          }
-        }
-        return exerciseMap;
-      })
-      .filter(Boolean) as Exercise[];
-    setExercices(newExercise);
-    setLocalStorage(tab, newExercise);
-  };
-
-  const addSet = (idExercise: string) => {
-    const newExercise = exercises.map((exerciseMap: Exercise) => {
-      if (exerciseMap.id === idExercise) {
-        const newSet: Sets = {
-          id: uuidv4(),
-          repetitions: "",
-        };
-        exerciseMap.sets.push(newSet);
-      }
-      return exerciseMap;
-    });
-    setExercices(newExercise);
-    localStorage.setItem("exercises", JSON.stringify(newExercise));
-  };
-
-  const openModal = () => {
-    Swal.fire({
-      title: "Eliminar",
-      showDenyButton: true,
-      denyButtonText: `Eliminar`,
-      showConfirmButton: false,
-      width: 180,
-    }).then((result) => {
-      if (result.isDenied) {
-        removeAllExercises();
-      }
-    });
-  };
-
-  const removeAllExercises = () => {
-    setExercices([]);
-    setLocalStorage(tab, []);
-  };
+  const {
+    addNewExercise,
+    addSet,
+    exercises,
+    name,
+    handleChangeInput,
+    handlerDeleteSet,
+    weigth,
+    openModal,
+  } = ExercisesHooks(tab);
 
   return (
     <div style={{ marginTop: "1.5rem" }}>
@@ -166,27 +37,12 @@ export default function Exercises({ tab }: ExerciseProps) {
               flexDirection: "row",
             }}
           >
-            <Input
-              sx={{
-                width: 110,
-              }}
-              placeholder="Exercise"
-              inputRef={name}
+            <NewExercise
+              name={name}
+              weigth={weigth}
+              addNewExercise={addNewExercise}
+              openModal={openModal}
             />
-            <Input
-              type="number"
-              sx={{
-                width: 28,
-                marginLeft: 2,
-                marginRight: 2,
-              }}
-              placeholder="Kg"
-              inputRef={weigth}
-            />
-            <Button onClick={addNewExercise}>Exercise</Button>
-            <Button variant="outlined" color="error" onClick={openModal}>
-              <DeleteIcon />
-            </Button>
           </div>
           {exercises.length !== 0 ? (
             exercises.map((exerciseMap: Exercise, index: number) => (
