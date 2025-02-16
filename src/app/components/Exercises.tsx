@@ -62,7 +62,7 @@ export default function Exercises({ tab }: ExerciseProps) {
                 >
                   <Typography
                     sx={{
-                      width: 160,
+                      width: 175,
                       paddingTop: "0.4rem",
                       fontSize: "0.9rem",
                     }}
