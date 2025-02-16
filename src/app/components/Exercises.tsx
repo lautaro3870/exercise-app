@@ -1,8 +1,8 @@
-import { Button, Typography } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 import { Input } from "@mui/material";
 import { InputRenderer } from "@/app/components/InputRenderer";
 import AddIcon from "@mui/icons-material/Add";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 type Sets = {
@@ -19,7 +19,8 @@ type Exercise = {
 
 export default function Exercises() {
   const [exercises, setExercices] = useState<Exercise[]>([]);
-  const [newExercise, setNewExercise] = useState("");
+  const name = useRef<HTMLInputElement>(null);
+  const weigth = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const exerciseFromLocalStorage = JSON.parse(
@@ -31,8 +32,8 @@ export default function Exercises() {
   const addNewExercise = () => {
     const newExerciseObject: Exercise = {
       id: uuidv4(),
-      name: newExercise,
-      weigth: "30kg",
+      name: name?.current?.value || "",
+      weigth: weigth?.current?.value || "",
       sets: [
         {
           id: uuidv4(),
@@ -43,6 +44,10 @@ export default function Exercises() {
     const newExercisesList = exercises.concat(newExerciseObject);
     setExercices(newExercisesList);
     localStorage.setItem("exercises", JSON.stringify(newExercisesList));
+    if (name.current && weigth.current) {
+      name.current.value = "";
+      weigth.current.value = "";
+    }
   };
 
   const handleChangeInput = (
@@ -68,6 +73,29 @@ export default function Exercises() {
       }
       return exerciseMap;
     });
+    setExercices(newExercise.flat());
+    localStorage.setItem("exercises", JSON.stringify(newExercise));
+  };
+
+  const handlerDeleteSet = (idExercise: string, idSet: string) => {
+    const newExercise = exercises
+      .map((exerciseMap: Exercise) => {
+        if (exerciseMap.id === idExercise) {
+          const newSets = exerciseMap.sets.filter(
+            (set: Sets) => set.id !== idSet
+          );
+          if (newSets.length === 0) {
+            return undefined;
+          } else {
+            return {
+              ...exerciseMap,
+              sets: newSets,
+            };
+          }
+        }
+        return exerciseMap;
+      })
+      .filter(Boolean) as Exercise[];
     setExercices(newExercise);
     localStorage.setItem("exercises", JSON.stringify(newExercise));
   };
@@ -108,9 +136,21 @@ export default function Exercises() {
             }}
           >
             <Input
-              onChange={(e) => {
-                setNewExercise(e.target.value);
+              sx={{
+                width: 110,
               }}
+              placeholder="Exercise"
+              inputRef={name}
+            />
+            <Input
+              type="text"
+              sx={{
+                width: 28,
+                marginLeft: 2,
+                marginRight: 2,
+              }}
+              placeholder="Kg"
+              inputRef={weigth}
             />
             <Button onClick={addNewExercise}>New exercise</Button>
           </div>
@@ -131,7 +171,7 @@ export default function Exercises() {
                   }}
                 >
                   <Typography
-                    sx={{ width: 140, paddingTop: "0.4rem" }}
+                    sx={{ width: 160, paddingTop: "0.4rem" }}
                     variant="body1"
                   >
                     {exerciseMap.name} - {exerciseMap.weigth}
@@ -139,10 +179,7 @@ export default function Exercises() {
                   <Button key={index} onClick={() => addSet(exerciseMap.id)}>
                     <AddIcon />
                   </Button>
-                  {/* {exerciseMap.sets.map((set: Sets) => (
-                  ))} */}
                 </div>
-
                 <div
                   key={exerciseMap.id}
                   style={{
@@ -164,6 +201,7 @@ export default function Exercises() {
                         idSet={set.id}
                         repetitions={set.repetitions}
                         handlerChange={handleChangeInput}
+                        handlerDeleteSet={handlerDeleteSet}
                       />
                     </div>
                   ))}

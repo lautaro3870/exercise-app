@@ -11,6 +11,7 @@ interface InputRendererProps {
     idExercise: string,
     idSet: string
   ) => void;
+  handlerDeleteSet: (idExercise: string, idSet: string) => void;
 }
 
 export const InputRenderer: React.FC<InputRendererProps> = ({
@@ -18,6 +19,7 @@ export const InputRenderer: React.FC<InputRendererProps> = ({
   idExercise,
   idSet,
   repetitions,
+  handlerDeleteSet
 }) => {
   return (
     <div
@@ -28,7 +30,7 @@ export const InputRenderer: React.FC<InputRendererProps> = ({
       }}
     >
       <Input
-        sx={{ width: 90, marginRight: "-1rem" }}
+        sx={{ width: 80, marginRight: "-1rem" }}
         key={idSet}
         value={repetitions}
         type="text"
@@ -36,7 +38,11 @@ export const InputRenderer: React.FC<InputRendererProps> = ({
           handlerChange(event, idExercise, idSet);
         }}
       />
-      <Button>
+      <Button
+        onClick={() => {
+          handlerDeleteSet(idExercise, idSet);
+        }}
+      >
         <DeleteIcon />
       </Button>
     </div>
