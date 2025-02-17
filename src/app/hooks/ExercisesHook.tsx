@@ -7,6 +7,7 @@ export function ExercisesHooks(tab: number) {
   const [exercises, setExercices] = useState<Exercise[]>([]);
   const name = useRef<HTMLInputElement>(null);
   const weigth = useRef<HTMLInputElement>(null);
+  const [edition, setEdition] = useState<boolean>(false);
 
   useEffect(() => {
     const exerciseFromLocalStorage = JSON.parse(
@@ -125,6 +126,26 @@ export function ExercisesHooks(tab: number) {
     setLocalStorage(tab, []);
   };
 
+  const updateNameAndWeigth = (
+    newValue: string,
+    typeInput: "name" | "weigth",
+    idExercise: string
+  ) => {
+    const ref = typeInput === "name" ? name : weigth;
+
+    if (ref.current) {
+      ref.current.value = newValue || "";
+    }
+
+    const updatedExercise = exercises.map((exercise: Exercise) => {
+      return exercise.id === idExercise
+        ? { ...exercise, [typeInput]: newValue }
+        : exercise;
+    });
+    setExercices(updatedExercise);
+    setLocalStorage(tab, updatedExercise);
+  };
+
   return {
     addNewExercise,
     addSet,
@@ -133,6 +154,9 @@ export function ExercisesHooks(tab: number) {
     handleChangeInput,
     handlerDeleteSet,
     weigth,
-    openModal
+    openModal,
+    setEdition,
+    edition,
+    updateNameAndWeigth,
   };
 }

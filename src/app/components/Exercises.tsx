@@ -1,9 +1,10 @@
-import { Button, Typography } from "@mui/material";
+import { Button, Input, Typography } from "@mui/material";
 import { InputRenderer } from "@/app/components/InputRenderer";
 import AddIcon from "@mui/icons-material/Add";
 import { Exercise, ExerciseProps } from "../interfaces/interfaces";
 import { ExercisesHooks } from "../hooks/ExercisesHook";
 import NewExercise from "./NewExercise";
+import SaveIcon from "@mui/icons-material/Save";
 
 export default function Exercises({ tab }: ExerciseProps) {
   const {
@@ -15,6 +16,9 @@ export default function Exercises({ tab }: ExerciseProps) {
     handlerDeleteSet,
     weigth,
     openModal,
+    setEdition,
+    edition,
+    updateNameAndWeigth
   } = ExercisesHooks(tab);
 
   return (
@@ -60,19 +64,70 @@ export default function Exercises({ tab }: ExerciseProps) {
                     flexDirection: "row",
                   }}
                 >
-                  <Typography
-                    sx={{
-                      width: 175,
-                      paddingTop: "0.4rem",
-                      fontSize: "0.9rem",
-                    }}
-                    variant="body1"
-                  >
-                    {exerciseMap.name} - {exerciseMap.weigth} <span>kg</span>
-                  </Typography>
-                  <Button key={index} onClick={() => addSet(exerciseMap.id)}>
-                    <AddIcon />
-                  </Button>
+                  {edition ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: 10,
+                      }}
+                    >
+                      <Input
+                        value={exerciseMap.name}
+                        sx={{ width: 100 }}
+                        inputRef={name}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          updateNameAndWeigth(
+                            e.target.value,
+                            "name",
+                            exerciseMap.id
+                          )
+                        }
+                      />
+                      <Input
+                        value={exerciseMap.weigth}
+                        sx={{ width: 50 }}
+                        inputRef={weigth}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          updateNameAndWeigth(
+                            e.target.value,
+                            "weigth",
+                            exerciseMap.id
+                          )
+                        }
+                      />
+                      <Button
+                        key={index}
+                        onClick={() => setEdition(false)}
+                      >
+                        <SaveIcon />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        display: "flex",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          width: 175,
+                          paddingTop: "0.4rem",
+                          fontSize: "0.9rem",
+                        }}
+                        variant="body1"
+                        onClick={() => setEdition(true)}
+                      >
+                        {exerciseMap.name} - {exerciseMap.weigth}{" "}
+                        <span>kg</span>
+                      </Typography>
+                      <Button
+                        key={index}
+                        onClick={() => addSet(exerciseMap.id)}
+                      >
+                        <AddIcon />
+                      </Button>
+                    </div>
+                  )}
                 </div>
                 <div
                   key={exerciseMap.id}
