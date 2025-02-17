@@ -19,7 +19,7 @@ export const InputRenderer: React.FC<InputRendererProps> = ({
       }}
     >
       <Input
-        sx={{ width: 80, marginRight: "-1rem" }}
+        sx={{ width: 90, marginRight: "-1rem" }}
         key={idSet}
         value={repetitions}
         type="text"
