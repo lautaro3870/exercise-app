@@ -21,11 +21,14 @@ export function ExercisesHooks(tab: number) {
   };
 
   const addNewExercise = () => {
+    const nameInput = document.querySelector("#name") as HTMLInputElement;
+    const weigthInput = document.querySelector("#weigth") as HTMLInputElement;
+
     const newExerciseObject: Exercise = {
       id: uuidv4(),
       tab: tab,
-      name: name?.current?.value || "",
-      weigth: weigth?.current?.value || "",
+      name: nameInput?.value || "",
+      weigth: weigthInput?.value || "",
       sets: [
         {
           id: uuidv4(),

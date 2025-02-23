@@ -35,10 +35,10 @@ export default function ExerciseTabs() {
     const today = new Date().getDay();
     switch (today) {
       case 1:
-        setValue(0);
+        setValue(1);
         break;
       case 2:
-        setValue(1);
+        setValue(0);
         break;
       case 3:
         setValue(2);

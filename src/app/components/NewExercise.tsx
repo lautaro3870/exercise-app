@@ -12,6 +12,7 @@ export default function NewExercise({
   return (
     <div>
       <Input
+        id="name"
         sx={{
           width: 110,
         }}
@@ -19,6 +20,7 @@ export default function NewExercise({
         inputRef={name}
       />
       <Input
+        id="weigth"
         type="number"
         sx={{
           width: 28,
