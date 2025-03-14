@@ -36,8 +36,10 @@ export interface InputRendererProps {
 }
 
 export interface NewExerciseProps {
-  name: RefObject<HTMLInputElement>;
-  weigth: RefObject<HTMLInputElement>;
+  name: string;
+  weigth: string;
+  setName: (name: string) => void,
+  setWeigth: (weigth: string) => void,
   addNewExercise: () => void;
   openModal: () => void;
 }

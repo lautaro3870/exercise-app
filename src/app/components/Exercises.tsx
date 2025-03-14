@@ -18,7 +18,9 @@ export default function Exercises({ tab }: ExerciseProps) {
     openModal,
     setEdition,
     edition,
-    updateNameAndWeigth
+    updateNameAndWeigth,
+    setName,
+    setWeigth
   } = ExercisesHooks(tab);
 
   return (
@@ -44,6 +46,8 @@ export default function Exercises({ tab }: ExerciseProps) {
             <NewExercise
               name={name}
               weigth={weigth}
+              setName={setName}
+              setWeigth={setWeigth}
               addNewExercise={addNewExercise}
               openModal={openModal}
             />
@@ -74,7 +78,6 @@ export default function Exercises({ tab }: ExerciseProps) {
                       <Input
                         value={exerciseMap.name}
                         sx={{ width: 100 }}
-                        inputRef={name}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                           updateNameAndWeigth(
                             e.target.value,
@@ -86,7 +89,6 @@ export default function Exercises({ tab }: ExerciseProps) {
                       <Input
                         value={exerciseMap.weigth}
                         sx={{ width: 50 }}
-                        inputRef={weigth}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                           updateNameAndWeigth(
                             e.target.value,

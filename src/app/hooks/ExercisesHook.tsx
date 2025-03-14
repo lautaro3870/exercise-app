@@ -1,17 +1,19 @@
-import { useEffect, useRef, useState } from "react";
-import { Exercise, Sets } from "../interfaces/interfaces";
-import { v4 as uuidv4 } from "uuid";
-import Swal from "sweetalert2";
+import { useEffect, useRef, useState } from 'react';
+import { Exercise, Sets } from '../interfaces/interfaces';
+import { v4 as uuidv4 } from 'uuid';
+import Swal from 'sweetalert2';
 
 export function ExercisesHooks(tab: number) {
   const [exercises, setExercices] = useState<Exercise[]>([]);
-  const name = useRef<HTMLInputElement>(null);
-  const weigth = useRef<HTMLInputElement>(null);
+
+  const [name, setName] = useState('');
+  const [weigth, setWeigth] = useState('');
+
   const [edition, setEdition] = useState<boolean>(false);
 
   useEffect(() => {
     const exerciseFromLocalStorage = JSON.parse(
-      window.localStorage.getItem(`exercises${tab}`) || "[]"
+      window.localStorage.getItem(`exercises${tab}`) || '[]'
     );
     setExercices(exerciseFromLocalStorage);
   }, [tab]);
@@ -21,27 +23,31 @@ export function ExercisesHooks(tab: number) {
   };
 
   const addNewExercise = () => {
-    const nameInput = document.querySelector("#name") as HTMLInputElement;
-    const weigthInput = document.querySelector("#weigth") as HTMLInputElement;
+    const nameInput = document.querySelector('#name') as HTMLInputElement;
+    const weigthInput = document.querySelector('#weigth') as HTMLInputElement;
 
     const newExerciseObject: Exercise = {
       id: uuidv4(),
       tab: tab,
-      name: nameInput?.value || "",
-      weigth: weigthInput?.value || "",
+      name: nameInput?.value || '',
+      weigth: weigthInput?.value || '',
       sets: [
         {
           id: uuidv4(),
-          repetitions: "",
+          repetitions: '',
         },
       ],
     };
     const newExercisesList = exercises.concat(newExerciseObject);
     setExercices(newExercisesList);
     setLocalStorage(tab, newExercisesList);
-    if (name.current && weigth.current) {
-      name.current.value = "";
-      weigth.current.value = "";
+    const nameElement = document.querySelector('#name') as HTMLInputElement;
+    const weigthElement = document.querySelector('#weigth') as HTMLInputElement;
+    if (nameElement && weigthElement) {
+      nameElement.value = '';
+      weigthElement.value = '';
+      setName('');
+      setWeigth('');
     }
   };
 
@@ -100,19 +106,19 @@ export function ExercisesHooks(tab: number) {
       if (exerciseMap.id === idExercise) {
         const newSet: Sets = {
           id: uuidv4(),
-          repetitions: "",
+          repetitions: '',
         };
         exerciseMap.sets.unshift(newSet);
       }
       return exerciseMap;
     });
     setExercices(newExercise);
-    localStorage.setItem("exercises", JSON.stringify(newExercise));
+    localStorage.setItem('exercises', JSON.stringify(newExercise));
   };
 
   const openModal = () => {
     Swal.fire({
-      title: "Eliminar",
+      title: 'Eliminar',
       showDenyButton: true,
       denyButtonText: `Eliminar`,
       showConfirmButton: false,
@@ -131,13 +137,13 @@ export function ExercisesHooks(tab: number) {
 
   const updateNameAndWeigth = (
     newValue: string,
-    typeInput: "name" | "weigth",
+    typeInput: 'name' | 'weigth',
     idExercise: string
   ) => {
-    const ref = typeInput === "name" ? name : weigth;
-
-    if (ref.current) {
-      ref.current.value = newValue || "";
+    if (typeInput === 'name') {
+      setName(newValue);
+    } else {
+      setWeigth(newValue);
     }
 
     const updatedExercise = exercises.map((exercise: Exercise) => {
@@ -161,5 +167,7 @@ export function ExercisesHooks(tab: number) {
     setEdition,
     edition,
     updateNameAndWeigth,
+    setName,
+    setWeigth,
   };
 }

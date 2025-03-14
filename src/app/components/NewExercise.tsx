@@ -6,7 +6,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 export default function NewExercise({
   addNewExercise,
   name,
+  setName,
   weigth,
+  setWeigth,
   openModal,
 }: NewExerciseProps) {
   return (
@@ -17,7 +19,7 @@ export default function NewExercise({
           width: 110,
         }}
         placeholder="Exercise"
-        inputRef={name}
+        onChange={(e: any) => setName(e.target.value)}
       />
       <Input
         id="weigth"
@@ -28,7 +30,7 @@ export default function NewExercise({
           marginRight: 2,
         }}
         placeholder="Kg"
-        inputRef={weigth}
+        onChange={(e: any) => setWeigth(e.target.value)}
       />
       <Button onClick={addNewExercise}>Exercise</Button>
       <Button variant="outlined" color="error" onClick={openModal}>
