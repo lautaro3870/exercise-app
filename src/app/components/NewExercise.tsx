@@ -2,6 +2,7 @@ import { Button } from "@mui/material";
 import { Input } from "@mui/material";
 import { NewExerciseProps } from "../interfaces/interfaces";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useState } from "react";
 
 export default function NewExercise({
   addNewExercise,
@@ -9,15 +10,19 @@ export default function NewExercise({
   weigth,
   openModal,
 }: NewExerciseProps) {
+  const [nameInput, setNameInput] = useState('');
   return (
     <div>
       <Input
         id="name"
+        data-testid="nameInput"
         sx={{
           width: 110,
         }}
         placeholder="Exercise"
         inputRef={name}
+        value={nameInput}
+        onChange={(e) => setNameInput(e.target.value)}
       />
       <Input
         id="weigth"
