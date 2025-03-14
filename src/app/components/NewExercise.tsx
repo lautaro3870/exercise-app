@@ -13,6 +13,7 @@ export default function NewExercise({
     <div>
       <Input
         id="name"
+        data-testid="nameInput"
         sx={{
           width: 110,
         }}
@@ -22,6 +23,7 @@ export default function NewExercise({
       <Input
         id="weigth"
         type="number"
+        data-testid="weightInput"
         sx={{
           width: 28,
           marginLeft: 2,
