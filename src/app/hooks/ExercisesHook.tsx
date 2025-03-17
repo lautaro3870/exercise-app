@@ -5,11 +5,11 @@ import Swal from 'sweetalert2';
 
 export function ExercisesHooks(tab: number) {
   const [exercises, setExercices] = useState<Exercise[]>([]);
-
   const [name, setName] = useState('');
   const [weigth, setWeigth] = useState('');
-
   const [edition, setEdition] = useState<boolean>(false);
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
+  const [exerciseDownload, setExerciseDownload] = useState<any[]>([]);
 
   useEffect(() => {
     const exerciseFromLocalStorage = JSON.parse(
@@ -17,6 +17,23 @@ export function ExercisesHooks(tab: number) {
     );
     setExercices(exerciseFromLocalStorage);
   }, [tab]);
+
+  useEffect(() => {
+    const exerciseDownloadTemp = exercises.map((exercise: Exercise) => {
+      /* eslint-disable  @typescript-eslint/no-explicit-any */
+      const transformedObject: any = {
+        Ejercicio: exercise.name,
+        Peso: exercise.weigth + " Kg",
+      };
+
+      exercise.sets.forEach((set: Sets, index: number) => {
+        transformedObject[`Set ${index + 1}`] = set.repetitions;
+      });
+
+      return transformedObject;
+    });
+    setExerciseDownload(exerciseDownloadTemp);
+  }, [exercises]);
 
   const setLocalStorage = (tab: number, exercises: Exercise[]) => {
     localStorage.setItem(`exercises${tab}`, JSON.stringify(exercises));
@@ -169,5 +186,6 @@ export function ExercisesHooks(tab: number) {
     updateNameAndWeigth,
     setName,
     setWeigth,
+    exerciseDownload,
   };
 }

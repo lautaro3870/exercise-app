@@ -5,6 +5,7 @@ import { Exercise, ExerciseProps } from '../interfaces/interfaces';
 import { ExercisesHooks } from '../hooks/ExercisesHook';
 import NewExercise from './NewExercise';
 import SaveIcon from '@mui/icons-material/Save';
+import { CSVLink } from 'react-csv';
 
 export default function Exercises({ tab }: ExerciseProps) {
   const {
@@ -20,7 +21,8 @@ export default function Exercises({ tab }: ExerciseProps) {
     edition,
     updateNameAndWeigth,
     setName,
-    setWeigth
+    setWeigth,
+    exerciseDownload,
   } = ExercisesHooks(tab);
 
   return (
@@ -162,6 +164,21 @@ export default function Exercises({ tab }: ExerciseProps) {
           ) : (
             <></>
           )}
+          <Button>
+            <CSVLink
+              data={exerciseDownload}
+              onClick={() => {
+                console.log(exerciseDownload);
+              }}
+              style={{
+                textDecoration: 'none',
+                marginRight: '6rem',
+                marginTop: '2rem'
+              }}
+            >
+              Download
+            </CSVLink>
+          </Button>
         </div>
       </div>
     </div>
