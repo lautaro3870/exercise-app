@@ -28,7 +28,7 @@ export function ExercisesHooks(tab: number) {
 
       exercise.sets.forEach((set: Sets, index: number) => {
         const reverseIndex = exercise.sets.length - index;
-        transformedObject[`Set ${reverseIndex}`] = set.repetitions.replaceAll('-', ', ');
+        transformedObject[`Set ${reverseIndex}`] = `R:${set.repetitions.replaceAll('-', ', ')}`
       });
 
       return transformedObject;
