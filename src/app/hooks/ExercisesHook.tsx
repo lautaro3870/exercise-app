@@ -23,17 +23,33 @@ export function ExercisesHooks(tab: number) {
       /* eslint-disable  @typescript-eslint/no-explicit-any */
       const transformedObject: any = {
         Ejercicio: exercise.name,
-        Peso: exercise.weigth + " Kg",
+        Peso: exercise.weigth + ' Kg',
       };
 
       exercise.sets.forEach((set: Sets, index: number) => {
-        transformedObject[`Set ${index + 1}`] = set.repetitions;
+        const reverseIndex = exercise.sets.length - index;
+        transformedObject[`Set ${reverseIndex}`] = set.repetitions;
       });
 
       return transformedObject;
     });
     setExerciseDownload(exerciseDownloadTemp);
   }, [exercises]);
+
+  const getFileName = (tab: number) => {
+    switch (tab) {
+      case 0:
+        return 'exercise-push.csv';
+      case 1:
+        return 'exercise-leg.csv';
+      case 2:
+        return 'exercise-pull.csv';
+      case 3:
+        return 'exercise-arms.csv';
+      case 4:
+        return 'exercise-p+e.csv';
+    }
+  };
 
   const setLocalStorage = (tab: number, exercises: Exercise[]) => {
     localStorage.setItem(`exercises${tab}`, JSON.stringify(exercises));
@@ -187,5 +203,6 @@ export function ExercisesHooks(tab: number) {
     setName,
     setWeigth,
     exerciseDownload,
+    getFileName
   };
 }

@@ -23,6 +23,7 @@ export default function Exercises({ tab }: ExerciseProps) {
     setName,
     setWeigth,
     exerciseDownload,
+    getFileName
   } = ExercisesHooks(tab);
 
   return (
@@ -167,9 +168,7 @@ export default function Exercises({ tab }: ExerciseProps) {
           <Button>
             <CSVLink
               data={exerciseDownload}
-              onClick={() => {
-                console.log(exerciseDownload);
-              }}
+              filename={getFileName(tab)}
               style={{
                 textDecoration: 'none',
                 marginRight: '6rem',
