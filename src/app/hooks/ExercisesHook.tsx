@@ -15,7 +15,21 @@ export function ExercisesHooks(tab: number) {
     const exerciseFromLocalStorage = JSON.parse(
       window.localStorage.getItem(`exercises${tab}`) || '[]'
     );
-    setExercices(exerciseFromLocalStorage);
+    const updatedExercises = exerciseFromLocalStorage.map(
+      (exercise: Exercise) => ({
+        ...exercise,
+        sets: exercise.sets.map((set: Sets, index: number) => {
+          if (!Object.hasOwn(set, 'index')) {
+            return {
+              ...set,
+              index: index + 1,
+            };
+          }
+          return set;
+        }),
+      })
+    );
+    setExercices(updatedExercises);
   }, [tab]);
 
   useEffect(() => {
@@ -28,7 +42,9 @@ export function ExercisesHooks(tab: number) {
 
       exercise.sets.forEach((set: Sets, index: number) => {
         const reverseIndex = exercise.sets.length - index;
-        transformedObject[`Set ${reverseIndex}`] = `${set.repetitions.replaceAll('-', 'x')}`
+        transformedObject[
+          `Set ${reverseIndex}`
+        ] = `${set.repetitions.replaceAll('-', 'x')}`;
       });
 
       return transformedObject;
@@ -141,7 +157,7 @@ export function ExercisesHooks(tab: number) {
         const newSet: Sets = {
           id: uuidv4(),
           repetitions: '',
-          index: exerciseMap.sets[exerciseMap.sets.length - 1].index + 1
+          index: exerciseMap.sets[exerciseMap.sets.length - 1].index + 1,
         };
         exerciseMap.sets.unshift(newSet);
       }
@@ -205,6 +221,6 @@ export function ExercisesHooks(tab: number) {
     setName,
     setWeigth,
     exerciseDownload,
-    getFileName
+    getFileName,
   };
 }
