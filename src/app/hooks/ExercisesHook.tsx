@@ -17,21 +17,14 @@ export function ExercisesHooks(tab: number) {
     );
     const updatedExercises = exerciseFromLocalStorage.map(
       (exercise: Exercise) => {
-        const maxIndex = exercise.sets.reduce((max: number, set: Sets) => {
-          return set.index && set.index > max ? set.index : max;
-        }, 0);
+        const reorderedSets = [...exercise.sets].reverse();
 
         return {
           ...exercise,
-          sets: exercise.sets.map((set: Sets, index: number) => {
-            if (!Object.hasOwn(set, 'index')) {
-              return {
-                ...set,
-                index: maxIndex + index + 1,
-              };
-            }
-            return set;
-          }),
+          sets: reorderedSets.map((set: Sets, index: number) => ({
+            ...set,
+            index: index + 1,
+          })),
         };
       }
     );
@@ -163,7 +156,7 @@ export function ExercisesHooks(tab: number) {
         const newSet: Sets = {
           id: uuidv4(),
           repetitions: '',
-          index: exerciseMap.sets[exerciseMap.sets.length - 1].index + 1,
+          index: exerciseMap.sets.length + 1,
         };
         exerciseMap.sets.unshift(newSet);
       }
