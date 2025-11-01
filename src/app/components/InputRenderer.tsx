@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Input, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { InputRendererProps } from '../interfaces/interfaces';
 
