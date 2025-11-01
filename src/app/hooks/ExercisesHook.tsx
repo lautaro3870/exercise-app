@@ -17,14 +17,21 @@ export function ExercisesHooks(tab: number) {
     );
     const updatedExercises = exerciseFromLocalStorage.map(
       (exercise: Exercise) => {
-        const reorderedSets = [...exercise.sets].reverse();
+        const maxIndex = exercise.sets.reduce((max: number, set: Sets) => {
+          return set.index && set.index > max ? set.index : max;
+        }, 0);
 
         return {
           ...exercise,
-          sets: reorderedSets.map((set: Sets, index: number) => ({
-            ...set,
-            index: index + 1,
-          })),
+          sets: exercise.sets.map((set: Sets, index: number) => {
+            if (!Object.hasOwn(set, 'index')) {
+              return {
+                ...set,
+                index: maxIndex + index + 1,
+              };
+            }
+            return set;
+          }),
         };
       }
     );
