@@ -16,18 +16,24 @@ export function ExercisesHooks(tab: number) {
       window.localStorage.getItem(`exercises${tab}`) || '[]'
     );
     const updatedExercises = exerciseFromLocalStorage.map(
-      (exercise: Exercise) => ({
-        ...exercise,
-        sets: exercise.sets.map((set: Sets, index: number) => {
-          if (!Object.hasOwn(set, 'index')) {
-            return {
-              ...set,
-              index: index + 1,
-            };
-          }
-          return set;
-        }),
-      })
+      (exercise: Exercise) => {
+        const maxIndex = exercise.sets.reduce((max: number, set: Sets) => {
+          return set.index && set.index > max ? set.index : max;
+        }, 0);
+
+        return {
+          ...exercise,
+          sets: exercise.sets.map((set: Sets, index: number) => {
+            if (!Object.hasOwn(set, 'index')) {
+              return {
+                ...set,
+                index: maxIndex + index + 1,
+              };
+            }
+            return set;
+          }),
+        };
+      }
     );
     setExercices(updatedExercises);
   }, [tab]);
