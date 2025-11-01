@@ -1,25 +1,28 @@
-import React from "react";
-import { Button, Input } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { InputRendererProps } from "../interfaces/interfaces";
+import React from 'react';
+import { Button, Input, TextField } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { InputRendererProps } from '../interfaces/interfaces';
 
 export const InputRenderer: React.FC<InputRendererProps> = ({
   handlerChange,
   idExercise,
   idSet,
   repetitions,
-  handlerDeleteSet
+  handlerDeleteSet,
+  index,
 }) => {
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "row",
+        display: 'flex',
+        flexDirection: 'row',
         gap: 10,
       }}
     >
-      <Input
-        sx={{ width: 90, marginRight: "-1rem" }}
+      <TextField
+        label={`Set ${index}`}
+        sx={{ width: 90, marginRight: '-1rem' }}
+        size="small"
         key={idSet}
         value={repetitions}
         type="text"

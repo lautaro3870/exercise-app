@@ -58,7 +58,7 @@ export function ExercisesHooks(tab: number) {
   const addNewExercise = () => {
     const nameInput = document.querySelector('#name') as HTMLInputElement;
     const weigthInput = document.querySelector('#weigth') as HTMLInputElement;
-
+    const index = 0;
     const newExerciseObject: Exercise = {
       id: uuidv4(),
       tab: tab,
@@ -68,6 +68,7 @@ export function ExercisesHooks(tab: number) {
         {
           id: uuidv4(),
           repetitions: '',
+          index: index + 1,
         },
       ],
     };
@@ -140,6 +141,7 @@ export function ExercisesHooks(tab: number) {
         const newSet: Sets = {
           id: uuidv4(),
           repetitions: '',
+          index: exerciseMap.sets[exerciseMap.sets.length - 1].index + 1
         };
         exerciseMap.sets.unshift(newSet);
       }

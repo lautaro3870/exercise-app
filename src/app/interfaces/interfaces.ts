@@ -7,6 +7,7 @@ export interface TabPanelProps {
 export type Sets = {
   id: string;
   repetitions: string;
+  index: number;
 };
 
 export type Exercise = {
@@ -31,6 +32,7 @@ export interface InputRendererProps {
     idSet: string
   ) => void;
   handlerDeleteSet: (idExercise: string, idSet: string) => void;
+  index: number;
 }
 
 export interface NewExerciseProps {

@@ -110,6 +110,7 @@ export default function Exercises({ tab }: ExerciseProps) {
                     <div
                       style={{
                         display: 'flex',
+                        paddingTop: 13
                       }}
                     >
                       <Typography
@@ -141,6 +142,7 @@ export default function Exercises({ tab }: ExerciseProps) {
                     flexDirection: 'row',
                     width: 200,
                     overflowX: 'scroll',
+                    paddingTop: 10
                   }}
                 >
                   {exerciseMap.sets.map((set) => (
@@ -156,6 +158,7 @@ export default function Exercises({ tab }: ExerciseProps) {
                         repetitions={set.repetitions}
                         handlerChange={handleChangeInput}
                         handlerDeleteSet={handlerDeleteSet}
+                        index={set.index}
                       />
                     </div>
                   ))}
